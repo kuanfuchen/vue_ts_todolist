@@ -1,0 +1,24 @@
+{
+  "name": "vue_ts_todolist",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.16.9",
+    "@types/node": "^20.11.30",
+    "quasar": "^2.15.1",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@quasar/vite-plugin": "^1.6.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "sass": "^1.33.0",
+    "typescript": "^5.4.3",
+    "vite": "^4.4.5"
+  }
+}
