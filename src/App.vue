@@ -1,22 +1,22 @@
 <template>
-  <div class="appStyle row justify-center items-center">
-    <div class="  ">
+  <div class="appStyle ">
+    <HeaderBar></HeaderBar>
+    <div class="row justify-center items-center">
       <Todolists class="todolistStyle"></Todolists>
     </div>
-    <!-- <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a> -->
-    
-    
   </div>
   <!-- <HelloWorld msg="Vite + Vue" /> -->
 </template>
 <script setup>
-// import HelloWorld from './components/HelloWorld.vue';
-import Todolists from './components/Todolist.vue';
+  // import HelloWorld from './components/HelloWorld.vue';
+  import HeaderBar from './components/HeaderBar.vue'; 
+  import Todolists from './components/Todolist.vue';
+  import { serviceListen } from './service/dataService.js';
+  import { onMounted } from 'vue';
+  onMounted(async()=>{
+    await serviceListen.appListenService()
+    
+  })
 </script>
 <style scoped>
   .appStyle{
