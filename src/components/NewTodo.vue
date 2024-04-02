@@ -11,8 +11,18 @@
 </template>
 <script setup>
   import {ref} from 'vue';
+  import {serviceListen} from '../service/dataService';
   const todoEvent  = ref('');
   const addTodo = ()=>{
-    console.log(todoEvent.value)
+    if(todoEvent.value === '')return
+    const todo = {
+      content:todoEvent.value,
+      "name":"KFC",
+      "progress": false,
+      "finish": false
+    }
+    serviceListen.postNewtodo(todo);
+    todoEvent.value = '';
+    // console.log(todoEvent.value)
   }
 </script>

@@ -12,20 +12,19 @@
             align="justify">
             <q-tab name="notStated" class="" label="未開始" />
             <q-tab name="inProgress" label="進行中"  />
-            <q-tab name="finished" label="已完成" :disabled="!signIn" />
+            <q-tab name="finished" label="已完成" />
           </q-tabs>
-          <q-tab-panels v-model="todoTab" animated class="bg-blue-grey-4  todolistStyle" >
+          <q-tab-panels v-model="todoTab" animated class="bg-blue-grey-3  todolistStyle" >
             <q-tab-panel name="notStated">
               <div class="text-indigo">
                 <div class="text-h6 text-white">未開始</div>
                 <div class="">
-
                 </div>
                 <ul>
-                  
-                  <li class="row text-white q-ml-md" v-for="(item, i) in notStartWork" :key="i">
+                  <li class="row text-white q-ml-md q-mt-sm" v-for="(item, i) in notStartWork" :key="i">
                     <div class="col-8">
-                      <q-btn color="primary" @click="startedProgress(item)">開始進行</q-btn>
+                      <q-btn color="primary" @click="startedProgress(item)"> > </q-btn>
+                      <q-btn class="q-ml-md" color="red-8" @click="deletedTodo(item)">X</q-btn>
                       <span class="q-ml-md">{{ item.content }}</span>
                     </div>
                     <span class="col-2">{{ item.name }}</span>
@@ -38,13 +37,33 @@
             <q-tab-panel name="inProgress">
               <div class="text-indigo">
                 <div class="text-h6">進行中</div>
-                沒有資訊!
+                <li class="row text-white q-ml-md q-mt-sm" v-for="(item, i) in inProgressWork" :key="i">
+                    <div class="col-8">
+                      <q-btn color="amber" icon="history"></q-btn>
+                      <q-btn color="teal" class="q-ml-md" @click="startedProgress(item)" no-caps> Fin. </q-btn>
+                      <q-btn class="q-ml-md" color="red-8" @click="deletedTodo(item)"
+                      icon="close"
+                      ></q-btn>
+                      <!-- <q-btn color="primary" @click="startedProgress(item)">開始進行</q-btn> -->
+                      <span class="q-ml-md">{{ item.content }}</span>
+                    </div>
+                    <span class="col-2">{{ item.name }}</span>
+                    <span class="col-2">{{ item.createdAt }}</span>
+                  </li>
               </div>
             </q-tab-panel>
             <q-tab-panel name="finished">
               <div class="text-indigo">
                 <div class="text-h6">已完成</div>
-                沒有資訊!
+                <li class="row text-white q-ml-md q-mt-sm" v-for="(item, i) in finishWork" :key="i">
+                    <div class="col-8">
+                      <q-btn class="" color="red-8" @click="deletedTodo(item)">X</q-btn>
+                      <!-- <q-btn color="primary" @click="startedProgress(item)">開始進行</q-btn> -->
+                      <span class="q-ml-md">{{ item.content }}</span>
+                    </div>
+                    <span class="col-2">{{ item.name }}</span>
+                    <span class="col-2">{{ item.createdAt }}</span>
+                  </li>
               </div>
               
             </q-tab-panel>
@@ -58,10 +77,10 @@
   import NewTodo from '@/components/NewTodo.vue';
   import { serviceListen } from '@/service/dataService';
   import { Subject, takeUntil, debounceTime } from 'rxjs';
+  
   import { ref, reactive } from 'vue';
   const comSubject$ = new Subject();
   const todoTab = ref('inProgress');
-  const signIn = ref(false);
   type todoData = {
     content:string,
     createdAt:any,
@@ -73,15 +92,23 @@
   const notStartWork:todoData[]  = reactive([]);
   const inProgressWork:todoData[] = reactive([]);
   const finishWork:todoData[] = reactive([]);
-  serviceListen.getTodolistInfo$.pipe(takeUntil(comSubject$),debounceTime(300)).subscribe((getTodolist:any)=>{
-    handleTodolist(getTodolist.data)
+  serviceListen.getTodolistInfo$.pipe(takeUntil(comSubject$),debounceTime(300)).subscribe(async(getTodolist:any)=>{
+    notStartWork.length = 0;
+    inProgressWork.length = 0;
+    finishWork.length = 0;
+    await handleTodolist(getTodolist.data);
   })
+  const deletedTodo = (item)=>{
+    const id = item._id;
+    serviceListen.deletedTodo(id);
+  }
   const startedProgress = (item:todoData) => {
-    console.log(item)
     item.progress = true;
-    serviceListen.updateProgress();
+    item.finish = false;
+    serviceListen.updateProgress(item);
   }
   const handleTodolist = (data:todoData[])=>{
+    // console.log(data, 'data')
     for(let i = 0 ; data.length >i ; i++){
       const date = new Date(data[i].createdAt).getTime();
       const year = new Date(date).getFullYear();
@@ -89,9 +116,7 @@
       const day = new Date(date).getDate();
       const hours = new Date(date).getHours();
       const min = new Date(date).getMinutes();
-      console.log( year, mon, day,hours, min)
-      data[i].createdAt = `${ year }年 ${ mon }月 ${ day }日 ${ hours }時 ${ min }分`
-      // data[i].createdAt = new Date(date.getTime() + (8 * 60 * 60 * 1000));
+      data[i].createdAt = `${ year }/${ mon }/${ day }  ${ hours }: ${ min }`;
       if(!data[i].finish && !data[i].progress){
         notStartWork.push(data[i])
       }else if(data[i].progress && !data[i].finish){
