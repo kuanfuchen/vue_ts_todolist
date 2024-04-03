@@ -23,8 +23,8 @@
                 <ul>
                   <li class="row text-white q-ml-md q-mt-sm" v-for="(item, i) in notStartWork" :key="i">
                     <div class="col-8">
-                      <q-btn color="primary" @click="startedProgress(item)"> > </q-btn>
-                      <q-btn class="q-ml-md" color="red-8" @click="deletedTodo(item)">X</q-btn>
+                      <q-btn color="primary" @click="startedProgress(item)" icon="play_arrow"></q-btn>
+                      <q-btn class="q-ml-md" color="red-8" @click="deletedTodo(item)" icon="close"></q-btn>
                       <span class="q-ml-md">{{ item.content }}</span>
                     </div>
                     <span class="col-2">{{ item.name }}</span>
@@ -39,8 +39,8 @@
                 <div class="text-h6">進行中</div>
                 <li class="row text-white q-ml-md q-mt-sm" v-for="(item, i) in inProgressWork" :key="i">
                     <div class="col-8">
-                      <q-btn color="amber" icon="history"></q-btn>
-                      <q-btn color="teal" class="q-ml-md" @click="startedProgress(item)" no-caps> Fin. </q-btn>
+                      <q-btn color="amber" icon="replay" @click="reStartWork(item)"></q-btn>
+                      <q-btn color="teal" class="q-ml-md" @click="finishedProgress(item)" no-caps> Fin. </q-btn>
                       <q-btn class="q-ml-md" color="red-8" @click="deletedTodo(item)"
                       icon="close"
                       ></q-btn>
@@ -57,7 +57,8 @@
                 <div class="text-h6">已完成</div>
                 <li class="row text-white q-ml-md q-mt-sm" v-for="(item, i) in finishWork" :key="i">
                     <div class="col-8">
-                      <q-btn class="" color="red-8" @click="deletedTodo(item)">X</q-btn>
+                      <q-btn color="amber" icon="replay" @click="reProgress(item)"></q-btn>
+                      <q-btn class="q-ml-sm" color="red-8" @click="deletedTodo(item)" icon="close" ></q-btn>
                       <!-- <q-btn color="primary" @click="startedProgress(item)">開始進行</q-btn> -->
                       <span class="q-ml-md">{{ item.content }}</span>
                     </div>
@@ -98,17 +99,27 @@
     finishWork.length = 0;
     await handleTodolist(getTodolist.data);
   })
-  const deletedTodo = (item)=>{
+  const deletedTodo = (item:todoData)=>{
     const id = item._id;
     serviceListen.deletedTodo(id);
   }
+  const reStartWork = (item:todoData) => {
+    item.progress = false;
+    serviceListen.updateTodo(item);
+  }
   const startedProgress = (item:todoData) => {
     item.progress = true;
+    serviceListen.updateTodo(item);
+  }
+  const finishedProgress = (item:todoData)=>{
+    item.finish = true;
+    serviceListen.updateTodo(item);
+  }
+  const reProgress = (item:todoData) => {
     item.finish = false;
-    serviceListen.updateProgress(item);
+    serviceListen.updateTodo(item);
   }
   const handleTodolist = (data:todoData[])=>{
-    // console.log(data, 'data')
     for(let i = 0 ; data.length >i ; i++){
       const date = new Date(data[i].createdAt).getTime();
       const year = new Date(date).getFullYear();

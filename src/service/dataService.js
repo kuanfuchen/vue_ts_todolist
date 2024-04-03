@@ -9,7 +9,7 @@ const appListenService = ()=>{
     _getTodolistInfo$.next(items)
   })
 };
-const updateProgress = (item)=>{
+const updateTodo = (item)=>{
   const id = item._id;
   const patchWeblink = `${webLink}/${id}`;
   const editContent = {
@@ -31,7 +31,7 @@ const deletedTodo = (id)=>{
 }
 export const serviceListen = {
   appListenService,
-  updateProgress,
+  updateTodo,
   postNewtodo,
   deletedTodo,
   getTodolistInfo$:_getTodolistInfo$.asObservable(),
