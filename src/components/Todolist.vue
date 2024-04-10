@@ -66,7 +66,6 @@
                     <span class="col-2">{{ item.createdAt }}</span>
                   </li>
               </div>
-              
             </q-tab-panel>
           </q-tab-panels>
         </q-card>
@@ -78,17 +77,24 @@
   import NewTodo from '@/components/NewTodo.vue';
   import { serviceListen } from '@/service/dataService';
   import { Subject, takeUntil, debounceTime } from 'rxjs';
-  
   import { ref, reactive } from 'vue';
   const comSubject$ = new Subject();
   const todoTab = ref('inProgress');
   type todoData = {
     content:string,
+    _id:string,
     createdAt:any,
     finish:boolean,
     name:string,
     progress:boolean,
-    _id:string
+    // 
+    updateTime:any,
+    perWeek:boolean,
+    perMon:boolean,
+    sponsor:string,
+    participants:string[],
+    description:string,
+    implementTime:string,
   }
   const notStartWork:todoData[]  = reactive([]);
   const inProgressWork:todoData[] = reactive([]);
