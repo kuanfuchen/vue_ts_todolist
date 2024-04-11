@@ -3,7 +3,8 @@
     <HeaderBar></HeaderBar>
     <DiagolSignin></DiagolSignin>
     <div class="row justify-center items-center">
-      <Todolists class="todolistStyle"></Todolists>
+      <Todolists ></Todolists>
+      <!-- class="todolistStyle" -->
     </div>
   </div>
   <!-- <HelloWorld msg="Vite + Vue" /> -->

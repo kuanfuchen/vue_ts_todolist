@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="q-pa-md">
-      <NewTodo></NewTodo>
+      <q-btn outline style="color: goldenrod;" label="新增事項" @click="toogledDiagol(true)" />
       <div class="q-gutter-y-md " style="width: 80vw">
         <q-card>
           <q-tabs
@@ -72,6 +72,9 @@
       </div>
     </div>
   </div>
+  <q-dialog v-model="toggleNewTodo">
+     <NewTodo @closeNewTodo="toogledDiagol" style="width:1200px !important"></NewTodo>
+  </q-dialog>
 </template>
 <script setup lang="ts">
   import NewTodo from '@/components/NewTodo.vue';
@@ -80,6 +83,7 @@
   import { ref, reactive } from 'vue';
   const comSubject$ = new Subject();
   const todoTab = ref('inProgress');
+  const toggleNewTodo = ref(false);
   type todoData = {
     content:string,
     _id:string,
@@ -99,6 +103,10 @@
   const notStartWork:todoData[]  = reactive([]);
   const inProgressWork:todoData[] = reactive([]);
   const finishWork:todoData[] = reactive([]);
+  const toogledDiagol = (ev)=>{
+    console.log(ev, 'ev')
+    toggleNewTodo.value = ev
+  }
   serviceListen.getTodolistInfo$.pipe(takeUntil(comSubject$),debounceTime(300)).subscribe(async(getTodolist:any)=>{
     notStartWork.length = 0;
     inProgressWork.length = 0;
