@@ -32,7 +32,6 @@
                   </li>
                 </ul>
               </div>
-              
             </q-tab-panel>
             <q-tab-panel name="inProgress">
               <div class="text-indigo">
@@ -73,7 +72,7 @@
     </div>
   </div>
   <q-dialog v-model="toggleNewTodo">
-     <NewTodo @closeNewTodo="toogledDiagol" style="width:1200px !important"></NewTodo>
+    <NewTodo @closeNewTodo="toogledDiagol" style="width:1200px !important"></NewTodo>
   </q-dialog>
 </template>
 <script setup lang="ts">

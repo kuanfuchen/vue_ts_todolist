@@ -4,6 +4,7 @@
     <DiagolSignin></DiagolSignin>
     <div class="row justify-center items-center">
       <Todolists ></Todolists>
+      <Calendar></Calendar>
       <!-- class="todolistStyle" -->
     </div>
   </div>
@@ -14,6 +15,7 @@
   import HeaderBar from './components/HeaderBar.vue'; 
   import Todolists from './components/Todolist.vue';
   import DiagolSignin from './components/DialogSignIn.vue';
+  import Calendar from './components/Calendar.vue';
   import { serviceListen } from './service/dataService.js';
   import { onMounted } from 'vue';
   onMounted(async()=>{
