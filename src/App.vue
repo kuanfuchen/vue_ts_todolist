@@ -2,9 +2,10 @@
   <div class="appStyle ">
     <HeaderBar></HeaderBar>
     <DiagolSignin></DiagolSignin>
+    <Calendar></Calendar>
     <div class="row justify-center items-center">
       <Todolists ></Todolists>
-      <Calendar></Calendar>
+      
       <!-- class="todolistStyle" -->
     </div>
   </div>
