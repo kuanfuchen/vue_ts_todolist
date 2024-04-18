@@ -1,15 +1,31 @@
 <template>
   <div class="bodyclass">
-    <div class="text-h6">行事曆</div>
-    <div>
-      <span>{{ todayNow.year }} / </span><span>{{ todayNow.mon + 1 }} / </span>
-      <span>{{ todayNow.day }}</span>
+    <div class="row text-bold text-h6">
+      <div class="  q-ml-md text-teal">行事曆</div>
+      <div class="q-ml-md text-primary">
+        <span>{{ todayNow.year }} / </span><span>{{ todayNow.mon + 1 }} / </span>
+        <span>{{ todayNow.day }}</span>
+      </div>
+    </div>
+    
+    <div class="row calendar">
+      <div class="col" v-for="(week, i) in weekday" :key="i">
+      <span class="text-bold">星期{{ week }}</span>
+      </div>
+    </div>
+    <div class="row calendar">
+      <div class="col" v-for="(day, index) in monthInfo" :key="index">
+        <div class="colDay" style="height: 10vh;" @click="addNewTodo(day)">
+          {{ day.date === 0 ? '': day.date}}
+        </div>
+        
+      </div>
     </div>
     
   </div>
 </template>
 <script setup >
-import { reactive,ref, onMounted } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
   const todayNow = reactive({
     year:2024,
     mon:4,
@@ -36,43 +52,36 @@ import { reactive,ref, onMounted } from 'vue';
     // 最後一周日期格子
     const lastWeekDates = 7 - monthLastDay.getDay() === 7 ? 0 : 7 - monthLastDay.getDay();
 
-    console.log(monthFitstDay.getDay(), 'monthFitstDay')
-    console.log(monthLastDay, 'monthLastDay');
-    console.log(currentDate, 'currentDate');
-    console.log(initFirstWeek.getDate(), 'initFirstWeek');
-    console.log(lastWeekDates, 'lastWeekDates');
-    
+    // console.log(monthFitstDay.getDay(), 'monthFitstDay')
+    // console.log(monthLastDay, 'monthLastDay');
+    // console.log(currentDate, 'currentDate');
+    // console.log(initFirstWeek.getDate(), 'initFirstWeek');
+    // console.log(lastWeekDates, 'lastWeekDates');
     const totalDates = firstDateDay - 1 + currentDate + lastWeekDates;
-    console.log(totalDates, 'totalDates');
     let dateIndex = 1;
     let weekdayIndex = firstDateDay;
-    // for(let i = 0; monthLastDay.length > i ;i++){
-
-    // }
-
-    const monthDateInfo = [];
     for(let i  = 0 ; totalDates > i ; i++){
-      if( i >= weekdayIndex && i <= monthLastDay){
-        monthDateInfo.push({
+      if( i >= weekdayIndex && i <= currentDate){
+        monthInfo.push({
         weekday:weekday.value[weekdayIndex],
-        date:1,
+        date:dateIndex,
         // holiday:false,
         // month:0,
         })
-        if(weekdayIndex <= 6){
-          weekdayIndex++
-        }else{
-          weekdayIndex = 0
-        }
-        // weekdayIndex = weekdayIndex < 7 ?  weekdayIndex++ : 0 ;
-        dateIndex = dateIndex < monthLastDay + 1 ? dateIndex++ : 0;
+        weekdayIndex = weekdayIndex < 6 ?  weekdayIndex + 1 : 0;
+        dateIndex = dateIndex <= currentDate? dateIndex + 1: 1;
       }else{
-
+        monthInfo.push({
+        weekday:'',
+        date:0,
+        })
       }
     }
-    console.log(monthDateInfo, 'monthDateInfo')
   }
-  onMounted(async()=>{
+  const addNewTodo = (dayInfo)=>{
+    console.log(dayInfo, 'dayInfo')
+  }
+  onMounted(async() => {
     todayNow.year = new Date().getFullYear();
     todayNow.mon = new Date().getMonth() ;
     todayNow.day = new Date().getDate();
@@ -89,5 +98,21 @@ import { reactive,ref, onMounted } from 'vue';
   }
   .container{
     padding: 0 3rem;
+  }
+  .calendar{
+    // display:flex;
+    // flex-flow: column;
+    // height:80vh;
+    .col{
+      min-width: 14.25%;
+      padding:10px 10px;
+      box-sizing:border-box;
+      border-left:1px solid rgba(255,255,255,0.2);
+      // &:nth-child(7n + 1)
+      .colDay{
+        height: 10vh;
+      }
+    }
+    
   }
 </style>
