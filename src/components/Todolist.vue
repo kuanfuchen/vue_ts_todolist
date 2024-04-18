@@ -133,6 +133,7 @@
     serviceListen.updateTodo(item);
   }
   const handleTodolist = (data:todoData[])=>{
+    if( data === undefined || data.length === 0)return;
     for(let i = 0 ; data.length >i ; i++){
       const date = new Date(data[i].createdAt).getTime();
       const year = new Date(date).getFullYear();

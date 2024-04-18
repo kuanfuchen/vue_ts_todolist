@@ -3,7 +3,9 @@ import axios from 'axios';
 const _getTodolistInfo$  = new BehaviorSubject([]);
 const webLink = 'http://localhost:3000/todos';
 const appListenService = ()=>{
+  return
   fetch(webLink).then((items)=>{
+    console.log(items, 'irems')
     return items.json();
   }).then((items)=>{
     _getTodolistInfo$.next(items)
