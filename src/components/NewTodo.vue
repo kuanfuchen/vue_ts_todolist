@@ -40,11 +40,14 @@
         <!-- </q-card> -->
         
       </q-card-section>
-      
       <q-card-actions align="right">
-        <q-btn class="q-ml-md" color="brown-5" size="lg" label="新增" @click="addTodo"></q-btn>
+        <div class="q-mr-lg">
+          <q-btn  color="amber" size="lg" label="離開" @click="closeTodo"></q-btn>
+        </div>
+        <div>
+          <q-btn color="brown-5" size="lg" label="新增" @click="addTodo"></q-btn>
+        </div>
       </q-card-actions>
-    
     </q-card>
   <!-- </q-dialog> -->
   <!-- <div class="row q-py-md">
@@ -74,7 +77,7 @@
   const v_progress = ref(false);
   const selectDate = ref('');
   const openDate = ref(false);
-  const addTodo = ()=>{
+  const addTodo = async()=>{
     // if(todoEvent.value === '')return
     const todo = {
       content:todoEvent.value,
@@ -84,8 +87,9 @@
     }
     serviceListen.postNewtodo(todo);
     todoEvent.value = '';
-    emits('closeNewTodo',false)
+    await closeTodo();
   };
+  const closeTodo = ()=> emits('closeNewTodo',false);
   const settingDate = ()=>{
     const datenow = new Date();
     const year = datenow.getFullYear();

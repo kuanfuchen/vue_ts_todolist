@@ -1,9 +1,7 @@
 <template>
   <div>
     <q-dialog v-model="confirmDialog" persistent>
-      
       <q-card  style="height: 20vh; width: 30vw" class="row items-center justify-center">
-        
         <q-card-section>
           <p class="text-h6">登入你的Google帳號</p>
           <!-- <q-avatar icon="signal_wifi_off" color="primary" text-color="white" /> -->

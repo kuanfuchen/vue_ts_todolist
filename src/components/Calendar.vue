@@ -1,11 +1,16 @@
 <template>
-  <div class="bodyclass">
-    <div class="row text-bold text-h6">
-      <div class="  q-ml-md text-teal">行事曆</div>
+  <div class="bodyclass q-pa-md" style="width: 80vw">
+    <div class="row text-bold text-h4 q-my-md">
+      <div class="q-ml-xs text-teal">行事曆</div>
       <div class="q-ml-md text-primary">
-        <span>{{ todayNow.year }} / </span><span>{{ todayNow.mon + 1 }} / </span>
-        <span>{{ todayNow.day }}</span>
+        <span>{{ todayNow.year }} 年 </span><span>{{ todayNow.mon + 1 }} 月 </span>
+        <!-- <span>{{ todayNow.day }}</span> -->
       </div>
+      <div class="q-ml-auto">
+        <q-btn class="q-mr-md text-bold" color="secondary" label="<" @click="calcMonth(-1)"></q-btn>
+        <q-btn color="secondary" class="text-bold" label=">" @click="calcMonth(1)"></q-btn>
+      </div>
+      
     </div>
     
     <div class="row calendar">
@@ -14,23 +19,32 @@
       </div>
     </div>
     <div class="row calendar">
-      <div class="col" v-for="(day, index) in monthInfo" :key="index">
-        <div class="colDay" style="height: 10vh;" @click="addNewTodo(day)">
+      <div class="col" v-for="(day, index) in monthInfo" :key="index" :style="{background:day.date===todayNow.day?'#80DEEA':'#fff'}"
+        style="font-weight: bold;" @dblclick="toogledFnTodo(true)">
+        <div class="colDay" style="height: 10vh;" >
           {{ day.date === 0 ? '': day.date}}
         </div>
-        
       </div>
     </div>
-    
+    <q-dialog v-model="toggleNewTodo" persistent>
+      <NewTodo @closeNewTodo="toogledFnTodo"></NewTodo>
+    </q-dialog>
   </div>
 </template>
 <script setup >
-import { reactive, ref, onMounted } from 'vue';
+  import { reactive, ref, onMounted } from 'vue';
+  import NewTodo from './NewTodo.vue';
+  const toggleNewTodo = ref(false);
   const todayNow = reactive({
     year:2024,
     mon:4,
     day:16
   });
+  const displayMonthInfo = reactive({
+    year:0,
+    mon:0,
+    day:0
+  })
   // {
   //   week:'日',
   //   date:0,
@@ -51,7 +65,6 @@ import { reactive, ref, onMounted } from 'vue';
     let initFirstWeek = new Date(year, month, 2 - firstDateDay);
     // 最後一周日期格子
     const lastWeekDates = 7 - monthLastDay.getDay() === 7 ? 0 : 7 - monthLastDay.getDay();
-
     // console.log(monthFitstDay.getDay(), 'monthFitstDay')
     // console.log(monthLastDay, 'monthLastDay');
     // console.log(currentDate, 'currentDate');
@@ -78,8 +91,9 @@ import { reactive, ref, onMounted } from 'vue';
       }
     }
   }
-  const addNewTodo = (dayInfo)=>{
-    console.log(dayInfo, 'dayInfo')
+  const toogledFnTodo = (boolean) => toggleNewTodo.value = boolean;
+  const calcMonth =(calcMon)=>{
+
   }
   onMounted(async() => {
     todayNow.year = new Date().getFullYear();
@@ -87,6 +101,7 @@ import { reactive, ref, onMounted } from 'vue';
     todayNow.day = new Date().getDate();
     await calcDisplayCalendar(todayNow.year, todayNow.mon);
   });
+
 </script>
 <style scope lang="scss">
   $primary:'#c6c0ba';
