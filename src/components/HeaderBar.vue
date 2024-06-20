@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-bar class="q-py-lg row">
+    <q-bar class="q-py-lg row barstyle">
       <!-- <q-btn dense flat round icon="lens" size="8.5px" color="red" />
       <q-btn dense flat round icon="lens" size="8.5px" color="yellow" />
       <q-btn dense flat round icon="lens" size="8.5px" color="green" /> -->
@@ -17,3 +17,8 @@
 <script setup>
 
 </script>
+<style scope>
+  .barstyle{
+    background: #009688;
+  }
+</style>
